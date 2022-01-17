@@ -1,0 +1,101 @@
+server:
+  port: 8080
+spring:
+  #静态资源处理
+  resources:
+    #启动默认静态资源处理，默认开启
+    add-mappings: true
+    cache:
+      cachecontrol:
+        #缓存缓存时间，单位秒
+        max-age: 3600
+    chain:
+      cache: true
+      #启动资源链
+      enabled: true
+      #启用压缩资源
+      compressed: true
+      #开启H5应用缓存。默认警用
+      html-application-cache: true
+    static-locations: classpath:/static/
+
+  thymeleaf:
+    cache: false
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://:3305/seckill?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+    #url: jdbc:mysql://localhost:3306/seckill?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+    username: root
+    password: 123456
+    hikari:
+      #连接池名
+      pool-name: DateHikariCP
+      # 最小空闲连接出
+      minimum-idle: 5
+      # 空闲连接存活最大时间，默认600000(10分钟)
+      idle-timeout: 600000
+      #最大连接数，默认10
+      maximum-pool-size: 10
+      # 从连接池返回的连接自动提交
+      auto-commit: true
+      # 连接最大存活时间，0表示永久存活，默认1800000(30分钟)
+      max-lifetime: 1800000
+      # 连接超时时间，默认30000(30秒)
+      connection-timeout: 30000
+      # 测试连接是否可用的查询语句
+      connection-test-query: SELECT 1
+
+  redis:
+    host:
+    port: 6378
+    #选择库
+    database: 0
+    timeout: 10000ms
+    lettuce:
+      pool:
+        #最大连接数默认是8
+        max-active: 8
+        max-wait: 100000ms
+        max-idle: 200
+        min-idle: 5
+
+  rabbitmq:
+    host:
+    username: root
+    password: 123456
+    #虚拟机
+    virtual-host: /
+    port: 5671
+    listener:
+      simple:
+        #消费者最小数量
+        concurrency: 10
+        #消费者最大数量
+        max-concurrency: 10
+        #限制消费者,每次只能处理一条消息，处理完毕再继续下一条
+        prefetch: 1
+        #启动是否默认启动容器，默认true
+        auto-startup: true
+        #被拒绝时重新进入队列
+        default-requeue-rejected: true
+    template:
+      retry:
+        #发布重试，默认false
+        enabled: true
+        #重试时间：默认时间10000ms
+        initial-interval: 1000ms
+        #重试次数
+        max-attempts: 3
+        #重试最大间隔时间，默认10000ms
+        max-interval: 10000ms
+        #重试间隔乘数   等待时间是之前的好多倍  比如2.0 第一次等待10s 第二次等待20s 第三次40s
+        multiplier: 1
+
+mybatis-plus:
+  mapper-locations: classpath*:/mapper/*.xml
+  type-aliases-package: cn.tedu.miaosha.pojo
+logging:
+  level:
+    cn.tedu.miaosha.mapper: debug
+
